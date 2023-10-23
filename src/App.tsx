@@ -1,6 +1,4 @@
-import load, { eml_to_json } from "../crate/pkg/eml_viewer";
-
-await load();
+import { parseEml } from "./utils";
 
 function App() {
   return (
@@ -10,16 +8,12 @@ function App() {
         onChange={async (e) => {
           const file = e.target.files?.[0];
 
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-              const contents = e.target?.result as ArrayBuffer;
-              const byteArray = new Uint8Array(contents);
-              const json = eml_to_json(byteArray);
-              console.log(json);
-            };
-            reader.readAsArrayBuffer(file);
+          if (!file) {
+            return;
           }
+
+          const json = JSON.parse(await parseEml(file));
+          console.log(json);
         }}
       />
     </main>
