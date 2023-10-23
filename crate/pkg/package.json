@@ -1,0 +1,17 @@
+{
+  "name": "eml-viewer",
+  "collaborators": [
+    "dinislam tebuev <3241533+tebuevd@users.noreply.github.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "eml_viewer_bg.wasm",
+    "eml_viewer.js",
+    "eml_viewer.d.ts"
+  ],
+  "module": "eml_viewer.js",
+  "types": "eml_viewer.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
