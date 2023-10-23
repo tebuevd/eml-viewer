@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "crate/pkg"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
