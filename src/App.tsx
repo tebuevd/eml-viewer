@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import { getAllFilenames, parseEmlFile, saveToOpfs } from "./opfs";
+import { useState } from "react";
+import { parseEmlFile } from "./opfs";
+import { useFiles } from "./hooks/useFiles";
 
 function App() {
   const [json, setJson] = useState<null | Record<
     string,
     string | number | string[]
   >>(null);
-  const [files, setFiles] = useState<string[]>([]);
 
-  useEffect(() => {
-    getAllFilenames().then((files) => setFiles(files));
-  }, []);
+  const { files, addFile } = useFiles();
 
   return (
     <main className="grid grid-cols-4 gap-4 min-h-full">
@@ -27,8 +25,7 @@ function App() {
                 return;
               }
 
-              await saveToOpfs(file);
-              // const json = await parseEml(file);
+              await addFile(file);
             }}
           />
         </label>

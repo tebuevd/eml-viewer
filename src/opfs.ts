@@ -18,8 +18,9 @@ export async function getAllFilenames() {
   const root = await getRoot();
   const filenames = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  for await (const name of (root as any).keys()) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-expect-error
+  for await (const name of root.keys()) {
     filenames.push(name);
   }
   return filenames;
