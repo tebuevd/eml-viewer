@@ -1,4 +1,3 @@
-import { eml_to_json } from "../crate/pkg/eml_viewer";
 import { parseEml } from "./utils";
 
 async function getRoot() {
@@ -19,7 +18,8 @@ export async function getAllFilenames() {
   const root = await getRoot();
   const filenames = [];
 
-  for await (const name of root.keys()) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for await (const name of (root as any).keys()) {
     filenames.push(name);
   }
   return filenames;

@@ -50,7 +50,9 @@ function App() {
       </section>
 
       <section className="p-8 pl-0 col-span-3">
-        {json && <iframe className="w-full h-full" srcDoc={json.body_html} />}
+        {json && (
+          <iframe className="w-full h-full" srcDoc={json.body_html as string} />
+        )}
       </section>
     </main>
   );
