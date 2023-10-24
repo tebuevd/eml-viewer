@@ -1,4 +1,5 @@
 import { eml_to_json } from "../crate/pkg/eml_viewer";
+import { parseEml } from "./utils";
 
 async function getRoot() {
   return await navigator.storage.getDirectory();
@@ -18,8 +19,6 @@ export async function getAllFilenames() {
   const root = await getRoot();
   const filenames = [];
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-expect-error
   for await (const name of root.keys()) {
     filenames.push(name);
   }
@@ -29,11 +28,8 @@ export async function getAllFilenames() {
 export async function parseEmlFile(filename: string) {
   const root = await getRoot();
   const fileHandle = await root.getFileHandle(filename);
-  const fileBytes = await fileHandle
-    .getFile()
-    .then((file) => file.arrayBuffer())
-    .then((buffer) => new Uint8Array(buffer));
+  const file = await fileHandle.getFile();
+  const json = await parseEml(file);
 
-  const json = eml_to_json(fileBytes);
-  console.log(JSON.parse(json));
+  return JSON.parse(json) as Record<string, string | string[] | number>;
 }
