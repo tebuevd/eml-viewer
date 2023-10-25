@@ -1,15 +1,19 @@
 import { useState, useCallback, useEffect } from "react";
-import { getAllFilenames, saveToOpfs } from "../opfs";
+import { instance } from "../workers/opfs";
 
 export function useFiles() {
   const [files, setFiles] = useState<string[]>(() => []);
+  // console.log({ files });
 
   useEffect(() => {
-    getAllFilenames().then((filenames) => setFiles(filenames));
+    instance.getAllFilenames().then((filenames) => {
+      console.log({ filenames });
+      setFiles(filenames);
+    });
   }, []);
 
   const addFile = useCallback(async (file: File) => {
-    await saveToOpfs(file);
+    await instance.saveToOpfs(file);
     setFiles((files) => [...files, file.name]);
     return file;
   }, []);

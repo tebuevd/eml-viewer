@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { parseEmlFile } from "./opfs";
 import { useFiles } from "./hooks/useFiles";
+import { instance } from "./workers/opfs";
 
 function App() {
   const [json, setJson] = useState<null | Record<
@@ -36,7 +36,7 @@ function App() {
               key={name}
               className="pl-4 bg-slate-200 hover:bg-transparent overflow-ellipsis overflow-hidden whitespace-nowrap"
               onClick={async () => {
-                const json = await parseEmlFile(name);
+                const json = await instance.parseEmlFile(name);
                 setJson(json);
               }}
             >
