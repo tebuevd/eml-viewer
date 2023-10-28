@@ -1,40 +1,58 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-export function Dropzone({ className }: { className?: string }) {
-	const [drag, setDrag] = useState(false);
+export function Dropzone({
+	className,
+	processFile,
+}: {
+	className?: string;
+	processFile: (file: File) => unknown;
+}) {
+	const [highlight, setHighlight] = useState(false);
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	return (
 		<label
 			className={twMerge(
 				clsx(
-					"block rounded border-2 border-solid p-2",
+					"relative grid place-content-center rounded border-2 border-solid",
+					"hover:border-none hover:outline hover:outline-2",
 					{
-						"border-t-orange-300": drag,
+						"border-none outline outline-2": highlight,
 					},
 					className,
 				),
 			)}
-			onDragEnter={() => void setDrag(true)}
-			onDragLeave={() => void setDrag(false)}
+			onDragEnter={() => void setHighlight(true)}
+			onDragLeave={() => void setHighlight(false)}
 			onDragOver={(e) => {
 				e.preventDefault();
 			}}
 			onDrop={async (e) => {
 				e.preventDefault();
+
+				for (const file of e.dataTransfer.files) {
+					await processFile(file);
+				}
+
+				setHighlight(false);
 			}}
 		>
-			<input id="file-input" type="file" className="hidden w-full text-sm" />
+			<input
+				ref={inputRef}
+				accept=".eml"
+				id="file-input"
+				type="file"
+				className="absolute inset-0 z-10 hidden"
+				onChange={async (e) => {
+					for (const file of e.target.files ?? []) {
+						await processFile(file);
+					}
+				}}
+				multiple
+			/>
+			Drag Files Here
 		</label>
 	);
 }
-// async (e) => {
-//           const file = e.target.files?.[0];
-
-//           if (!file) {
-//             return;
-//           }
-
-//           await addFile(file);
-//         }
