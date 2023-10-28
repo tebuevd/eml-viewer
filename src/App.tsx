@@ -7,8 +7,9 @@ function App() {
     string,
     string | number | string[]
   >>(null);
-
   const { files, addFile } = useFiles();
+
+  console.log(json);
 
   return (
     <main className="grid grid-cols-4 gap-4 min-h-full">

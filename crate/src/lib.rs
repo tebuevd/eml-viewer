@@ -22,9 +22,11 @@ pub fn eml_to_json(data: &[u8]) -> String {
     let attachment_count = message.attachment_count();
     let body = message.body_text(0).unwrap();
     let body_html = message.body_html(0).unwrap();
+    let date = message.date().unwrap().to_rfc3339();
 
     let mut json_obj = json::JsonValue::new_object();
 
+    json_obj["date"] = date.into();
     json_obj["to"] = to.into();
     json_obj["from"] = from.into();
     json_obj["subject"] = subject.into();

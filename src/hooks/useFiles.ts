@@ -3,11 +3,9 @@ import { instance } from "../workers/opfs";
 
 export function useFiles() {
   const [files, setFiles] = useState<string[]>(() => []);
-  // console.log({ files });
 
   useEffect(() => {
     instance.getAllFilenames().then((filenames) => {
-      console.log({ filenames });
       setFiles(filenames);
     });
   }, []);
