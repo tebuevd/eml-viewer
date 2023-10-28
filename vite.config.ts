@@ -5,11 +5,11 @@ import { comlink } from "vite-plugin-comlink";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    target: "esnext",
-  },
-  plugins: [wasm(), react(), comlink()],
-  worker: {
-    plugins: [wasm(), comlink()],
-  },
+	build: {
+		target: "esnext",
+	},
+	plugins: [wasm(), react(), comlink()],
+	worker: {
+		plugins: [wasm(), comlink()],
+	},
 });
