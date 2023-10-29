@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useFiles } from "./hooks/useFiles";
-import { instance } from "./workers/opfs";
+import { instance } from "./workers/opfs-worker";
 import { Dropzone } from "./components/dropzone";
 
 function App() {
