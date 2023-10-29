@@ -11,10 +11,10 @@ function App() {
 	const { files, addFile } = useFiles();
 
 	return (
-		<main className="grid min-h-full grid-cols-[minmax(200px,15%),1fr] grid-rows-5 gap-2">
+		<main className="grid max-h-full min-h-full grid-cols-[minmax(200px,15%),1fr] grid-rows-5 gap-2">
 			<section
 				id="files"
-				className="col-span-1 col-start-1 row-span-4 row-start-1 p-2"
+				className="col-span-1 col-start-1 row-span-4 row-start-1 overflow-scroll p-2"
 			>
 				<ul className="mt-4 cursor-pointer space-y-1 text-sm">
 					<li className="cursor-default">🏠 (Root)</li>

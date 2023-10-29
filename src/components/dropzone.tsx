@@ -16,7 +16,7 @@ export function Dropzone({
 		<label
 			className={twMerge(
 				clsx(
-					"relative grid place-content-center rounded border-2 border-solid",
+					"grid place-content-center rounded border-2 border-solid",
 					"hover:border-none hover:outline hover:outline-2",
 					{
 						"border-none outline outline-2": highlight,
@@ -24,8 +24,14 @@ export function Dropzone({
 					className,
 				),
 			)}
-			onDragEnter={() => void setHighlight(true)}
-			onDragLeave={() => void setHighlight(false)}
+			onDragEnter={(e) => {
+				e.preventDefault();
+				void setHighlight(true);
+			}}
+			onDragLeave={(e) => {
+				e.preventDefault();
+				void setHighlight(false);
+			}}
 			onDragOver={(e) => {
 				e.preventDefault();
 			}}
@@ -44,13 +50,17 @@ export function Dropzone({
 				accept=".eml"
 				id="file-input"
 				type="file"
-				className="absolute inset-0 z-10 hidden"
+				multiple
+				className="hidden"
 				onChange={async (e) => {
+					e.preventDefault();
+
 					for (const file of e.target.files ?? []) {
 						await processFile(file);
 					}
+
+					setHighlight(false);
 				}}
-				multiple
 			/>
 			Drag Files Here
 		</label>
