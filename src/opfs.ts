@@ -1,13 +1,5 @@
 /// <reference lib="webworker" />
-import load, { eml_to_json } from "../crate/pkg/eml_viewer";
-
-async function parseEml(file: File) {
-	await load();
-	const buffer = await file.arrayBuffer();
-	const bytes = new Uint8Array(buffer);
-	const jsonString = eml_to_json(bytes);
-	return jsonString;
-}
+import { parseEml } from "./utils/eml";
 
 async function getRoot() {
 	return await navigator.storage.getDirectory();
@@ -33,6 +25,13 @@ export async function getAllFilenames() {
 		filenames.push(name);
 	}
 	return filenames;
+}
+
+export async function getFile(filename: string) {
+	const root = await getRoot();
+	const fileHandle = await root.getFileHandle(filename);
+	const file = await fileHandle.getFile();
+	return file;
 }
 
 export async function parseEmlFile(filename: string) {

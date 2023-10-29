@@ -1,6 +1,5 @@
-import clsx from "clsx";
 import { useRef, useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "../utils/styles";
 
 export function Dropzone({
 	className,
@@ -14,15 +13,13 @@ export function Dropzone({
 
 	return (
 		<label
-			className={twMerge(
-				clsx(
-					"grid place-content-center rounded border-2 border-solid",
-					"hover:border-none hover:outline hover:outline-2",
-					{
-						"border-none outline outline-2": highlight,
-					},
-					className,
-				),
+			className={cn(
+				"grid place-content-center rounded border-2 border-solid",
+				"hover:border-none hover:outline hover:outline-2",
+				{
+					"border-none outline outline-2": highlight,
+				},
+				className,
 			)}
 			onDragEnter={(e) => {
 				e.preventDefault();
