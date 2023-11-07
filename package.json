@@ -1,46 +1,47 @@
 {
-	"name": "eml-viewer",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"build-wasm": "wasm-pack build ./crate --target web",
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview"
-	},
-	"dependencies": {
-		"clsx": "^2.0.0",
-		"comlink": "^4.4.1",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"tailwind-merge": "^1.14.0"
-	},
-	"devDependencies": {
-		"@types/react": "^18.2.15",
-		"@types/react-dom": "^18.2.7",
-		"@typescript-eslint/eslint-plugin": "^6.0.0",
-		"@typescript-eslint/parser": "^6.0.0",
-		"@vitejs/plugin-react-swc": "^3.3.2",
-		"autoprefixer": "^10.4.16",
-		"eslint": "^8.45.0",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"eslint-plugin-react-refresh": "^0.4.3",
-		"postcss": "^8.4.31",
-		"prettier": "^3.0.3",
-		"prettier-plugin-tailwindcss": "^0.5.6",
-		"tailwindcss": "^3.3.3",
-		"typescript": "latest",
-		"vite": "^4.4.5",
-		"vite-plugin-comlink": "^3.0.5",
-		"vite-plugin-wasm": "^3.2.2",
-		"wasm-pack": "^0.12.1"
-	},
-	"prettier": {
-		"useTabs": true,
-		"plugins": [
-			"prettier-plugin-tailwindcss"
-		]
-	}
+  "name": "eml-viewer",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build-wasm": "wasm-pack build ./crate --target web",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@sqlite.org/sqlite-wasm": "^3.44.0-build1",
+    "clsx": "^2.0.0",
+    "comlink": "^4.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^1.14.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "postcss": "^8.4.31",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.6",
+    "tailwindcss": "^3.3.3",
+    "typescript": "latest",
+    "vite": "^4.4.5",
+    "vite-plugin-comlink": "^3.0.5",
+    "vite-plugin-wasm": "^3.2.2",
+    "wasm-pack": "^0.12.1"
+  },
+  "prettier": {
+    "useTabs": true,
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  }
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useFiles } from "./hooks/useFiles";
 import { instance } from "./workers/opfs-worker";
+import { instance as db } from "./workers/sqlite";
 import { Dropzone } from "./components/dropzone";
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
 	const { files, addFile } = useFiles();
 
 	return (
-		<main className="grid max-h-full min-h-full grid-cols-[minmax(200px,15%),1fr] grid-rows-5 gap-2">
+		<main className="grid max-h-full min-h-full grid-cols-[minmax(200px,15%),1fr] grid-rows-5 gap-2 dark:bg-slate-600 dark:text-slate-200">
 			<section
 				id="files"
 				className="col-span-1 col-start-1 row-span-4 row-start-1 overflow-scroll p-2"
@@ -21,7 +22,7 @@ function App() {
 					{files.map((name) => (
 						<li
 							key={name}
-							className="overflow-hidden overflow-ellipsis whitespace-nowrap bg-slate-200 pl-4 hover:bg-transparent"
+							className="overflow-hidden overflow-ellipsis whitespace-nowrap bg-slate-200 pl-4 hover:bg-transparent dark:bg-slate-800 dark:text-white dark:hover:bg-red-800"
 							onClick={async () => {
 								const json = await instance.parseEmlFile(name);
 								setJson(json);
@@ -39,7 +40,28 @@ function App() {
 				<Dropzone className="h-full" processFile={addFile} />
 			</section>
 
-			<section className="col-start-2 row-span-full p-8 pl-0">
+			<section className="col-start-2 row-span-full space-x-4 p-8 pl-0">
+				<button
+					className="rounded bg-slate-200 p-3 text-black"
+					onClick={async () => {
+						console.time("initDb");
+						await db.initDb();
+						console.timeEnd("initDb");
+					}}
+				>
+					Load DB
+				</button>
+				<button
+					className="rounded bg-slate-200 p-3 text-black"
+					onClick={async () => {
+						console.time("query");
+						const results = await db.query();
+						console.timeEnd("query");
+						console.log(results);
+					}}
+				>
+					Query
+				</button>
 				{json && (
 					<iframe className="h-full w-full" srcDoc={json.body_html as string} />
 				)}
