@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import { instance as opfs } from "../workers/opfs-worker";
-import { instance as sqlite } from "../workers/sqlite";
 
 export function useFiles() {
 	const [files, setFiles] = useState<string[]>(() => []);

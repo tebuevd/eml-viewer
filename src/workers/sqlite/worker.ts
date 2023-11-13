@@ -19,6 +19,7 @@ export async function saveToDb(filename: string) {
 
 	db.exec({
 		sql: `insert into emails values (?, ?, ?)`,
+		//@ts-ignore
 		bind: [file.from.join(", "), file.subject, file.body],
 	});
 }
