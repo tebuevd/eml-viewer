@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { instance as opfs } from "../workers/opfs-worker";
+import { instance as opfs } from "../workers/opfs";
 
 export function useFiles() {
 	const [files, setFiles] = useState<string[]>(() => []);

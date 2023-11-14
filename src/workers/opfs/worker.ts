@@ -1,5 +1,5 @@
 /// <reference lib="webworker" />
-import { parseEml } from "./utils/eml";
+import { parseEml } from "../../utils/eml";
 
 async function getRoot() {
 	return await navigator.storage.getDirectory();

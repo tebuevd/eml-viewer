@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
-import { parseEmlFile } from "../../opfs";
-import { instance as opfs } from "../opfs-worker";
+import { parseEmlFile } from "../opfs/worker";
+import { instance as opfs } from "../opfs";
 
 const sqlite3 = await sqlite3InitModule({
 	print: console.log,

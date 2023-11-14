@@ -10,6 +10,7 @@ export default defineConfig({
 	},
 	plugins: [wasm(), react(), comlink()],
 	worker: {
+		format: "es",
 		plugins: [wasm(), comlink()],
 	},
 	optimizeDeps: {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useFiles } from "./hooks/useFiles";
-import { instance } from "./workers/opfs-worker";
+import { instance as opfs } from "./workers/opfs";
 import { instance as db } from "./workers/sqlite";
 import { Dropzone } from "./components/dropzone";
 
@@ -24,7 +24,7 @@ function App() {
 							key={name}
 							className="overflow-hidden overflow-ellipsis whitespace-nowrap bg-slate-200 pl-4 hover:bg-transparent dark:bg-slate-800 dark:text-white dark:hover:bg-red-800"
 							onClick={async () => {
-								const json = await instance.parseEmlFile(name);
+								const json = await opfs.parseEmlFile(name);
 								setJson(json);
 							}}
 						>
