@@ -6,10 +6,12 @@ export function useFiles() {
 	const [files, setFiles] = useState<string[]>(() => []);
 
 	useEffect(() => {
-		opfs.getAllFilenames().then(async (filenames) => {
+		async function loadFilenamesIntoState() {
+			const filenames = await opfs.getAllFilenames();
 			setFiles(filenames);
 			setLoading(false);
-		});
+		}
+		loadFilenamesIntoState().catch(console.error);
 	}, []);
 
 	const addFile = useCallback(async (file: File) => {

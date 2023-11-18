@@ -10,7 +10,7 @@ function App() {
 		string | number | string[]
 	>>(null);
 	const { files, addFile, loading } = useFiles();
-	const [results, setResults] = useState<any[]>([]);
+	const [results, setResults] = useState<unknown[]>([]);
 
 	if (loading) {
 		return <p>Loading...</p>;
@@ -28,9 +28,15 @@ function App() {
 						<li
 							key={name}
 							className="overflow-hidden overflow-ellipsis whitespace-nowrap bg-slate-200 pl-4 hover:bg-transparent dark:bg-slate-800 dark:text-white dark:hover:bg-red-800"
-							onClick={async () => {
-								const json = await opfs.parseEmlFile(name);
-								setJson(json);
+							onClick={() => {
+								opfs
+									.parseEmlFile(name)
+									.then((json) => {
+										setJson(json);
+									})
+									.catch((err) => {
+										console.error("Error in parseEmlFile:", err);
+									});
 							}}
 						>
 							{name}
@@ -48,14 +54,20 @@ function App() {
 			<section className="col-start-2 row-span-full flex flex-col space-x-4 p-8 pl-0">
 				<form
 					className="hidden gap-2"
-					onSubmit={async function (e) {
+					onSubmit={function formOnSubmit(e) {
 						e.preventDefault();
 
 						const data = new FormData(e.target as HTMLFormElement);
 						const query =
 							typeof data.get("query") === "string" ? data.get("query") : "";
-						const results = await db.query(query?.toString() ?? "");
-						setResults(results);
+
+						db.query(query?.toString() ?? "")
+							.then((results) => {
+								setResults(results);
+							})
+							.catch((e) => {
+								console.error("Error in query:", e);
+							});
 					}}
 				>
 					<input className="p-2 dark:text-black" name="query" type="search" />
@@ -68,6 +80,7 @@ function App() {
 				</form>
 				<div className="hidden flex-1 overflow-scroll">
 					{results.map((result, ix) => (
+						//@ts-expect-error need typing for the result type
 						<p key={ix}>{result.title}</p>
 					))}
 				</div>

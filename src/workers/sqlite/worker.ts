@@ -23,11 +23,16 @@ for (const filename of filenames) {
 export async function saveToDb(filename: string) {
 	const file = await parseEmlFile(filename);
 
-	db.exec({
-		sql: `insert into emails values (?, ?, ?)`,
-		//@ts-ignore
-		bind: [file.from.join(", "), file.subject, file.body],
-	});
+	if (
+		typeof file.from === "object" &&
+		typeof file.subject === "string" &&
+		typeof file.body === "string"
+	) {
+		db.exec({
+			sql: `insert into emails values (?, ?, ?)`,
+			bind: [file.from.join(", "), file.subject, file.body],
+		});
+	}
 }
 
 export function query(text: string) {

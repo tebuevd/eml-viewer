@@ -11,6 +11,12 @@ export function Dropzone({
 	const [highlight, setHighlight] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 
+	async function writeFilesToOPFS(files: FileList) {
+		for (const file of files) {
+			await processFile(file);
+		}
+	}
+
 	return (
 		<label
 			className={cn(
@@ -23,23 +29,24 @@ export function Dropzone({
 			)}
 			onDragEnter={(e) => {
 				e.preventDefault();
-				void setHighlight(true);
+				setHighlight(true);
 			}}
 			onDragLeave={(e) => {
 				e.preventDefault();
-				void setHighlight(false);
+				setHighlight(false);
 			}}
 			onDragOver={(e) => {
 				e.preventDefault();
 			}}
-			onDrop={async (e) => {
+			onDrop={(e) => {
 				e.preventDefault();
-
-				for (const file of e.dataTransfer.files) {
-					await processFile(file);
-				}
-
-				setHighlight(false);
+				writeFilesToOPFS(e.dataTransfer.files)
+					.then(() => {
+						setHighlight(false);
+					})
+					.catch((err) => {
+						console.error("Error in writeFilesToOPFS:", err);
+					});
 			}}
 		>
 			<input
@@ -49,14 +56,20 @@ export function Dropzone({
 				type="file"
 				multiple
 				className="hidden"
-				onChange={async (e) => {
+				onChange={(e) => {
 					e.preventDefault();
 
-					for (const file of e.target.files ?? []) {
-						await processFile(file);
+					if (!e.target.files) {
+						return;
 					}
 
-					setHighlight(false);
+					writeFilesToOPFS(e.target.files)
+						.then(() => {
+							setHighlight(false);
+						})
+						.catch((err) => {
+							console.error("Error in writeFilesToOPFS:", err);
+						});
 				}}
 			/>
 			Drag Files Here
