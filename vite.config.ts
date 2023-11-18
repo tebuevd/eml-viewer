@@ -11,7 +11,7 @@ export default defineConfig({
 	plugins: [wasm(), react(), comlink()],
 	worker: {
 		format: "es",
-		plugins: [wasm(), comlink()],
+		plugins: () => [wasm(), comlink()],
 	},
 	optimizeDeps: {
 		exclude: ["@sqlite.org/sqlite-wasm"],
