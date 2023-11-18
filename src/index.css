@@ -8,6 +8,11 @@ body,
 	height: 100%;
 }
 
+/* hide the scroll-bar */
+.row-span-full::-webkit-scrollbar {
+	display: none;
+}
+
 @font-face {
 	font-family: "Superhuman Adelle";
 	font-weight: normal;

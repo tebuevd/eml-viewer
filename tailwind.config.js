@@ -6,6 +6,15 @@ export default {
 			fontFamily: {
 				"sh-adelle": ['"Superhuman Adelle"', "ui-sans-serif"],
 			},
+			colors: {
+				sh: {
+					highlight: "#F4F6FB",
+					sidebar: {
+						start: "hsl(220deg, 100%, 99%)",
+						end: "hsl(214deg, 100%, 99%)",
+					},
+				},
+			},
 		},
 	},
 	plugins: [],

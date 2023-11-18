@@ -16,6 +16,7 @@ module.exports = {
 	},
 	plugins: ["@typescript-eslint", "react-refresh", "perfectionist"],
 	rules: {
+		"@typescript-eslint/consistent-type-definitions": ["error", "type"],
 		"react-refresh/only-export-components": [
 			"warn",
 			{ allowConstantExport: true },
