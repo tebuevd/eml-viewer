@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+
 import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
 import { parseEmlFile } from "../opfs/worker";
 import { instance as opfs } from "../opfs";
@@ -14,6 +15,11 @@ db.exec(
 	'create virtual table emails using fts5(sender, title, body, tokenize="trigram");',
 );
 
+const filenames = await opfs.getAllFilenames();
+for (const filename of filenames) {
+	await saveToDb(filename);
+}
+
 export async function saveToDb(filename: string) {
 	const file = await parseEmlFile(filename);
 
@@ -24,17 +30,10 @@ export async function saveToDb(filename: string) {
 	});
 }
 
-export async function initDb() {
-	const filenames = await opfs.getAllFilenames();
-	for (const filename of filenames) {
-		await saveToDb(filename);
-	}
-}
-
-export function query() {
+export function query(text: string) {
 	return db.exec({
 		sql: `select * from emails(?)`,
-		bind: ["hello"],
+		bind: [text],
 		returnValue: "resultRows",
 		rowMode: "object",
 	});

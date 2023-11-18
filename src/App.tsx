@@ -9,7 +9,12 @@ function App() {
 		string,
 		string | number | string[]
 	>>(null);
-	const { files, addFile } = useFiles();
+	const { files, addFile, loading } = useFiles();
+	const [results, setResults] = useState<any[]>([]);
+
+	if (loading) {
+		return <p>Loading...</p>;
+	}
 
 	return (
 		<main className="grid max-h-full min-h-full grid-cols-[minmax(200px,15%),1fr] grid-rows-5 gap-2 dark:bg-slate-600 dark:text-slate-200">
@@ -40,28 +45,30 @@ function App() {
 				<Dropzone className="h-full" processFile={addFile} />
 			</section>
 
-			<section className="col-start-2 row-span-full space-x-4 p-8 pl-0">
-				<button
-					className="rounded bg-slate-200 p-3 text-black"
-					onClick={async () => {
-						console.time("initDb");
-						await db.initDb();
-						console.timeEnd("initDb");
+			<section className="col-start-2 row-span-full flex flex-col space-x-4 p-8 pl-0">
+				<form
+					className="flex gap-2"
+					onSubmit={async function (e) {
+						e.preventDefault();
+
+						const data = new FormData(e.target as HTMLFormElement);
+						const results = await db.query(data.get("query"));
+						setResults(results);
 					}}
 				>
-					Load DB
-				</button>
-				<button
-					className="rounded bg-slate-200 p-3 text-black"
-					onClick={async () => {
-						console.time("query");
-						const results = await db.query();
-						console.timeEnd("query");
-						console.log(results);
-					}}
-				>
-					Query
-				</button>
+					<input className="p-2 dark:text-black" name="query" type="search" />
+					<button
+						type="submit"
+						className="rounded-md p-2 dark:border-2 dark:border-white"
+					>
+						Search
+					</button>
+				</form>
+				<div className="flex-1 overflow-scroll">
+					{results.map((result, ix) => (
+						<p key={ix}>{result.title}</p>
+					))}
+				</div>
 				{json && (
 					<iframe className="h-full w-full" srcDoc={json.body_html as string} />
 				)}

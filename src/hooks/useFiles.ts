@@ -2,11 +2,13 @@ import { useState, useCallback, useEffect } from "react";
 import { instance as opfs } from "../workers/opfs";
 
 export function useFiles() {
+	const [loading, setLoading] = useState<boolean>(true);
 	const [files, setFiles] = useState<string[]>(() => []);
 
 	useEffect(() => {
-		opfs.getAllFilenames().then((filenames) => {
+		opfs.getAllFilenames().then(async (filenames) => {
 			setFiles(filenames);
+			setLoading(false);
 		});
 	}, []);
 
@@ -16,5 +18,5 @@ export function useFiles() {
 		return file;
 	}, []);
 
-	return { files, addFile };
+	return { files, addFile, loading };
 }
