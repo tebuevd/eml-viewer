@@ -2,7 +2,11 @@
 export default {
 	content: ["./index.html", "./src/**/*.{tsx,ts,jsx,js}"],
 	theme: {
-		extend: {},
+		extend: {
+			fontFamily: {
+				"sh-adelle": ['"Superhuman Adelle"', "ui-sans-serif"],
+			},
+		},
 	},
 	plugins: [],
 };

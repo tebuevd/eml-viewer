@@ -7,3 +7,39 @@ body,
 #root {
 	height: 100%;
 }
+
+@font-face {
+	font-family: "Superhuman Adelle";
+	font-weight: normal;
+	font-display: block;
+	src: url("/fonts/sh-adelle-normal.woff2") format("truetype");
+}
+
+@font-face {
+	font-family: "Superhuman Adelle";
+	font-weight: 100;
+	font-display: block;
+	src: url("/fonts/sh-adelle-100.woff2") format("truetype");
+}
+
+@font-face {
+	font-family: "Superhuman Adelle";
+	font-style: italic;
+	font-display: block;
+	src: url("/fonts/sh-adelle-italic.woff2") format("truetype");
+}
+
+@font-face {
+	font-family: "Superhuman Adelle";
+	font-weight: 700;
+	font-display: block;
+	src: url("/fonts/sh-adelle-bold.woff2") format("truetype");
+}
+
+@font-face {
+	font-family: "Superhuman Adelle";
+	font-weight: 700;
+	font-style: italic;
+	font-display: block;
+	src: url("/fonts/sh-adelle-bold-italic.woff2") format("truetype");
+}
