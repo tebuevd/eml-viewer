@@ -1,15 +1,16 @@
 import { useState } from "react";
+
+import { Dropzone } from "./components/dropzone";
 import { useFiles } from "./hooks/useFiles";
 import { instance as opfs } from "./workers/opfs";
 import { instance as db } from "./workers/sqlite";
-import { Dropzone } from "./components/dropzone";
 
 function App() {
-	const [json, setJson] = useState<null | Record<
+	const [json, setJson] = useState<Record<
 		string,
-		string | number | string[]
-	>>(null);
-	const { files, addFile, loading } = useFiles();
+		number | string | string[]
+	> | null>(null);
+	const { addFile, files, loading } = useFiles();
 	const [results, setResults] = useState<unknown[]>([]);
 
 	if (loading) {
@@ -19,15 +20,15 @@ function App() {
 	return (
 		<main className="grid max-h-full min-h-full grid-cols-[minmax(200px,15%),1fr] grid-rows-5 gap-2 dark:bg-slate-600 dark:text-slate-200">
 			<section
-				id="files"
 				className="col-span-1 col-start-1 row-span-4 row-start-1 overflow-scroll p-2"
+				id="files"
 			>
 				<ul className="mt-4 cursor-pointer space-y-1 text-sm">
 					<li className="cursor-default">🏠 (Root)</li>
 					{files.map((name) => (
 						<li
-							key={name}
 							className="overflow-hidden overflow-ellipsis whitespace-nowrap bg-slate-200 pl-4 hover:bg-transparent dark:bg-slate-800 dark:text-white dark:hover:bg-red-800"
+							key={name}
 							onClick={() => {
 								opfs
 									.parseEmlFile(name)
@@ -45,8 +46,8 @@ function App() {
 				</ul>
 			</section>
 			<section
-				id="dropzone"
 				className="col-span-1 col-start-1 row-span-1 row-end-6 p-2"
+				id="dropzone"
 			>
 				<Dropzone className="h-full" processFile={addFile} />
 			</section>
@@ -72,8 +73,8 @@ function App() {
 				>
 					<input className="p-2 dark:text-black" name="query" type="search" />
 					<button
-						type="submit"
 						className="rounded-md p-2 dark:border-2 dark:border-white"
+						type="submit"
 					>
 						Search
 					</button>

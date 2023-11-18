@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+
 import { cn } from "../utils/styles";
 
 export function Dropzone({
@@ -50,12 +51,10 @@ export function Dropzone({
 			}}
 		>
 			<input
-				ref={inputRef}
 				accept=".eml"
-				id="file-input"
-				type="file"
-				multiple
 				className="hidden"
+				id="file-input"
+				multiple
 				onChange={(e) => {
 					e.preventDefault();
 
@@ -71,6 +70,8 @@ export function Dropzone({
 							console.error("Error in writeFilesToOPFS:", err);
 						});
 				}}
+				ref={inputRef}
+				type="file"
 			/>
 			Drag Files Here
 		</label>

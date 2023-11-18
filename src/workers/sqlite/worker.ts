@@ -1,8 +1,9 @@
 /// <reference lib="webworker" />
 
 import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
-import { parseEmlFile } from "../opfs/worker";
+
 import { instance as opfs } from "../opfs";
+import { parseEmlFile } from "../opfs/worker";
 
 const sqlite3 = await sqlite3InitModule({
 	print: console.log,
@@ -29,17 +30,17 @@ export async function saveToDb(filename: string) {
 		typeof file.body === "string"
 	) {
 		db.exec({
-			sql: `insert into emails values (?, ?, ?)`,
 			bind: [file.from.join(", "), file.subject, file.body],
+			sql: `insert into emails values (?, ?, ?)`,
 		});
 	}
 }
 
 export function query(text: string) {
 	return db.exec({
-		sql: `select * from emails(?)`,
 		bind: [text],
 		returnValue: "resultRows",
 		rowMode: "object",
+		sql: `select * from emails(?)`,
 	});
 }

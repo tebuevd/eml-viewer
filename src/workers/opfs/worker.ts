@@ -40,5 +40,5 @@ export async function parseEmlFile(filename: string) {
 	const file = await fileHandle.getFile();
 	const json = await parseEml(file);
 
-	return JSON.parse(json) as Record<string, string | string[] | number>;
+	return JSON.parse(json) as Record<string, number | string | string[]>;
 }

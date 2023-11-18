@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+
 import { instance as opfs } from "../workers/opfs";
 
 export function useFiles() {
@@ -20,5 +21,5 @@ export function useFiles() {
 		return file;
 	}, []);
 
-	return { files, addFile, loading };
+	return { addFile, files, loading };
 }
