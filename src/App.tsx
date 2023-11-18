@@ -52,7 +52,9 @@ function App() {
 						e.preventDefault();
 
 						const data = new FormData(e.target as HTMLFormElement);
-						const results = await db.query(data.get("query"));
+						const query =
+							typeof data.get("query") === "string" ? data.get("query") : "";
+						const results = await db.query(query?.toString() ?? "");
 						setResults(results);
 					}}
 				>
