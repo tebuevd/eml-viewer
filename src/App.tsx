@@ -47,7 +47,7 @@ function App() {
 
 			<section className="col-start-2 row-span-full flex flex-col space-x-4 p-8 pl-0">
 				<form
-					className="flex gap-2"
+					className="flex hidden gap-2"
 					onSubmit={async function (e) {
 						e.preventDefault();
 
@@ -66,7 +66,7 @@ function App() {
 						Search
 					</button>
 				</form>
-				<div className="flex-1 overflow-scroll">
+				<div className="hidden flex-1 overflow-scroll">
 					{results.map((result, ix) => (
 						<p key={ix}>{result.title}</p>
 					))}
