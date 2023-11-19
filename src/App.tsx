@@ -1,21 +1,24 @@
 import { Dropzone } from "./components/dropzone";
 import { EmailList } from "./components/email-list";
 import { useFiles } from "./hooks/useFiles";
+import { DbProvider } from "./providers/db-provider";
 
 function App() {
 	const { addFile } = useFiles();
 
 	return (
-		<main className="grid max-h-full min-h-full grid-cols-[1fr,minmax(200px,15%)] grid-rows-5 dark:bg-slate-600 dark:text-slate-200">
-			<EmailList />
+		<DbProvider>
+			<main className="grid max-h-full min-h-full grid-cols-[1fr,minmax(200px,15%)] grid-rows-5 dark:bg-slate-600 dark:text-slate-200">
+				<EmailList />
 
-			<aside
-				className="from-sh-sidebar-start to-sh-sidebar-end row-span-full flex flex-col bg-gradient-to-r from-0% to-40% p-2"
-				id="dropzone"
-			>
-				<Dropzone className="mt-auto h-40" processFile={addFile} />
-			</aside>
-		</main>
+				<aside
+					className="from-sh-sidebar-start to-sh-sidebar-end row-span-full flex flex-col bg-gradient-to-r from-0% to-40% p-2"
+					id="dropzone"
+				>
+					<Dropzone className="mt-auto h-40" processFile={addFile} />
+				</aside>
+			</main>
+		</DbProvider>
 	);
 }
 

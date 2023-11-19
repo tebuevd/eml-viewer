@@ -1,25 +1,11 @@
 /// <reference lib="webworker" />
 
-import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
+import sqlite3InitModule, { Database } from "@sqlite.org/sqlite-wasm";
 
 import { instance as opfs } from "../opfs";
 import { parseEmlFile } from "../opfs/worker";
 
-const sqlite3 = await sqlite3InitModule({
-	print: console.log,
-	printErr: console.error,
-});
-
-const db = new sqlite3.oo1.DB("db.sqlite3", "c");
-
-db.exec(
-	'create virtual table emails using fts5(sender, title, body, tokenize="trigram");',
-);
-
-const filenames = await opfs.getAllFilenames();
-for (const filename of filenames) {
-	await saveToDb(filename);
-}
+let db: Database;
 
 export async function saveToDb(filename: string) {
 	const file = await parseEmlFile(filename);
@@ -43,4 +29,24 @@ export function query(text: string) {
 		rowMode: "object",
 		sql: `select * from emails(?)`,
 	});
+}
+
+export async function initDb() {
+	const sqlite3 = await sqlite3InitModule({
+		print: console.log,
+		printErr: console.error,
+	});
+
+	db = new sqlite3.oo1.DB("db.sqlite3", "c");
+
+	db.exec(
+		'create virtual table emails using fts5(sender, title, body, tokenize="trigram");',
+	);
+
+	const filenames = await opfs.getAllFilenames();
+	for (const filename of filenames) {
+		await saveToDb(filename);
+	}
+
+	return typeof db !== "undefined";
 }
