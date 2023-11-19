@@ -1,7 +1,9 @@
 /// <reference lib="webworker" />
 
 import sqlite3InitModule, { Database } from "@sqlite.org/sqlite-wasm";
+import { ulid } from "ulidx";
 
+import { EmailRow } from "../../types/email";
 import { instance as opfs } from "../opfs";
 import { parseEmlFile } from "../opfs/worker";
 
@@ -19,7 +21,35 @@ export async function saveToDb(filename: string) {
 			file.subject,
 			file.body,
 		],
-		sql: `insert into emails values (?, ?, ?, ?)`,
+		sql: `insert into emails_fts values (?, ?, ?, ?)`,
+	});
+
+	db.exec({
+		bind: [
+			ulid(),
+			file.from[0].name,
+			file.from[0].address,
+			file.to[0].name,
+			file.to[0].address,
+			file.subject,
+			file.body,
+			file.body_html,
+			file.date,
+		],
+		sql: `
+			insert into emails (
+				id, 
+				from_name, 
+				from_address, 
+				to_name, 
+				to_address, 
+				subject, 
+				body, 
+				html, 
+				date
+			) 
+			values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+		`,
 	});
 }
 
@@ -28,7 +58,7 @@ export function query(text: string) {
 		bind: [text],
 		returnValue: "resultRows",
 		rowMode: "object",
-		sql: `select * from emails(?)`,
+		sql: `select * from emails_fts(?)`,
 	});
 }
 
@@ -41,7 +71,20 @@ export async function initDb() {
 	db = new sqlite3.oo1.DB("db.sqlite3", "c");
 
 	db.exec(
-		'create virtual table emails using fts5(from, to, title, body, tokenize="trigram");',
+		'create virtual table emails_fts using fts5(from, to, title, body, tokenize="trigram");',
+	);
+	db.exec(
+		`create table emails (
+			id text primary key,
+			from_name text,
+			from_address text,
+			to_name text,
+			to_address text,
+			subject text,
+			body text,
+			html text,
+			date text
+		);`,
 	);
 
 	const filenames = await opfs.getAllFilenames();
@@ -49,12 +92,14 @@ export async function initDb() {
 		await saveToDb(filename);
 	}
 
-	const all = db.exec("select * from emails", {
+	return typeof db !== "undefined";
+}
+
+export function getAllEmails() {
+	const emails = db.exec("select * from emails order by date desc", {
 		returnValue: "resultRows",
 		rowMode: "object",
 	});
 
-	console.log({ all });
-
-	return typeof db !== "undefined";
+	return emails.map((email) => EmailRow.parse(email));
 }

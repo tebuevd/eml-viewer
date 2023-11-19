@@ -1,21 +1,7 @@
 /// <reference lib="webworker" />
-import { z } from "zod";
 
+import { EmailJson } from "../../types/email";
 import { parseEml } from "../../utils/eml";
-
-const AddressBlob = z.object({
-	address: z.string(),
-	name: z.string().nullable(),
-});
-
-const EmailJson = z.object({
-	body: z.string().nullable(),
-	body_html: z.string().nullable(),
-	date: z.string().nullable(),
-	from: z.array(AddressBlob),
-	subject: z.string().nullable(),
-	to: z.array(AddressBlob),
-});
 
 async function getRoot() {
 	return await navigator.storage.getDirectory();
