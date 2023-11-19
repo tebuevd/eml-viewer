@@ -8,7 +8,7 @@ function App() {
 
 	return (
 		<DbProvider>
-			<main className="grid max-h-full min-h-full grid-cols-[minmax(0,1fr),minmax(200px,15%)] grid-rows-5 dark:bg-slate-600 dark:text-slate-200">
+			<main className="grid max-h-full min-h-full grid-cols-[minmax(0,1fr),minmax(200px,15%)] grid-rows-5 ">
 				<EmailList />
 
 				<aside
