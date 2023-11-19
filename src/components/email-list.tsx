@@ -14,7 +14,12 @@ export function EmailList() {
 			<section className="no-scrollbar overflow-scroll">
 				<ul>
 					{files.map((name, ix) => (
-						<EmailItemRow from={"Favour Nerrise"} key={ix} subject={name} />
+						<EmailItemRow
+							from={"Favour Nerrise"}
+							idx={ix}
+							key={ix}
+							subject={name}
+						/>
 					))}
 				</ul>
 			</section>
