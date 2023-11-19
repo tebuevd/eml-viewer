@@ -1,5 +1,21 @@
 /// <reference lib="webworker" />
+import { z } from "zod";
+
 import { parseEml } from "../../utils/eml";
+
+const AddressBlob = z.object({
+	address: z.string(),
+	name: z.string().nullable(),
+});
+
+const EmailJson = z.object({
+	body: z.string().nullable(),
+	body_html: z.string().nullable(),
+	date: z.string().nullable(),
+	from: z.array(AddressBlob),
+	subject: z.string().nullable(),
+	to: z.array(AddressBlob),
+});
 
 async function getRoot() {
 	return await navigator.storage.getDirectory();
@@ -40,5 +56,5 @@ export async function parseEmlFile(filename: string) {
 	const file = await fileHandle.getFile();
 	const json = await parseEml(file);
 
-	return JSON.parse(json) as Record<string, number | string | string[]>;
+	return EmailJson.parse(JSON.parse(json));
 }

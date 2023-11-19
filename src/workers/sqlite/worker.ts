@@ -10,16 +10,17 @@ let db: Database;
 export async function saveToDb(filename: string) {
 	const file = await parseEmlFile(filename);
 
-	if (
-		typeof file.from === "object" &&
-		typeof file.subject === "string" &&
-		typeof file.body === "string"
-	) {
-		db.exec({
-			bind: [file.from.join(", "), file.subject, file.body],
-			sql: `insert into emails values (?, ?, ?)`,
-		});
-	}
+	db.exec({
+		bind: [
+			file.from
+				.map(({ address, name }) => `${name ?? ""} ${address}`)
+				.join(" "),
+			file.to.map(({ address, name }) => `${name ?? ""} ${address}`).join(" "),
+			file.subject,
+			file.body,
+		],
+		sql: `insert into emails values (?, ?, ?, ?)`,
+	});
 }
 
 export function query(text: string) {
@@ -40,13 +41,20 @@ export async function initDb() {
 	db = new sqlite3.oo1.DB("db.sqlite3", "c");
 
 	db.exec(
-		'create virtual table emails using fts5(sender, title, body, tokenize="trigram");',
+		'create virtual table emails using fts5(from, to, title, body, tokenize="trigram");',
 	);
 
 	const filenames = await opfs.getAllFilenames();
 	for (const filename of filenames) {
 		await saveToDb(filename);
 	}
+
+	const all = db.exec("select * from emails", {
+		returnValue: "resultRows",
+		rowMode: "object",
+	});
+
+	console.log({ all });
 
 	return typeof db !== "undefined";
 }

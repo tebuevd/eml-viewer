@@ -1,0 +1,30 @@
+{
+	//eslint
+	"eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }], //make all linting errors yellow
+
+	//prettier
+	"prettier.requireConfig": true,
+
+	//tailwindCSS
+	"tailwindCSS.includeLanguages": {
+		"plaintext": "html"
+	},
+
+	//typescript
+	"typescript.tsdk": "node_modules/typescript/lib", //always use local typescript
+
+	//editor
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.quickSuggestions": {
+		"strings": "on"
+	},
+
+	//files
+	"files.associations": {
+		"*.css": "tailwindcss"
+	}
+}
