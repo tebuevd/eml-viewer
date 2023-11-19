@@ -9,6 +9,7 @@ export default {
 			colors: {
 				sh: {
 					highlight: "#F4F6FB",
+					highlightbar: "#AEB1DD",
 					sidebar: {
 						start: "hsl(220deg, 100%, 99%)",
 						end: "hsl(214deg, 100%, 99%)",

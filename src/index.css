@@ -9,7 +9,7 @@ body,
 }
 
 /* hide the scroll-bar */
-.row-span-full::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar {
 	display: none;
 }
 

@@ -9,10 +9,16 @@ export function EmailList() {
 	}
 
 	return (
-		<section className="z-10 row-span-full overflow-scroll pt-20 shadow-[0_0_30px_0] shadow-black/10">
-			{files.map((name, ix) => (
-				<EmailItemRow from={"Favour Nerrise"} key={ix} subject={name} />
-			))}
-		</section>
+		<main className="z-10 row-span-full flex flex-col shadow-[0_0_30px_0] shadow-black/10">
+			<section className="h-20"></section>
+			<section className="no-scrollbar overflow-scroll">
+				<ul>
+					{files.map((name, ix) => (
+						<EmailItemRow from={"Favour Nerrise"} key={ix} subject={name} />
+					))}
+				</ul>
+			</section>
+			<section className="h-0" />
+		</main>
 	);
 }
