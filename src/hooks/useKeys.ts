@@ -8,6 +8,7 @@ export function useKeys() {
 
 			if (next instanceof HTMLElement) {
 				next.focus();
+				next.scrollIntoView({ block: "center" });
 			} else {
 				const first = document.querySelector("li");
 
@@ -21,6 +22,7 @@ export function useKeys() {
 
 			if (prev instanceof HTMLElement && prev.tagName.toLowerCase() === "li") {
 				prev.focus();
+				prev.scrollIntoView({ block: "center" });
 			} else {
 				const first = document.querySelector("li");
 
