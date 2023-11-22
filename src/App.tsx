@@ -1,10 +1,13 @@
 import { Dropzone } from "./components/dropzone";
 import { EmailList } from "./components/email-list";
 import { useFiles } from "./hooks/useFiles";
+import { useKeys } from "./hooks/useKeys";
 import { DbProvider } from "./providers/db-provider";
 
 function App() {
 	const { addFile } = useFiles();
+
+	useKeys();
 
 	return (
 		<DbProvider>

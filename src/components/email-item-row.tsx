@@ -3,16 +3,21 @@ import { format } from "date-fns";
 type EmailItemRowProps = {
 	date: null | string;
 	from: string;
-	idx: number;
 	subject: string;
+	tabindex: number;
 };
 
-export function EmailItemRow({ date, from, idx, subject }: EmailItemRowProps) {
+export function EmailItemRow({
+	date,
+	from,
+	subject,
+	tabindex,
+}: EmailItemRowProps) {
 	const dateString = date ? format(new Date(date), "MMM dd").toUpperCase() : "";
 	return (
 		<li
 			className="group relative h-9 cursor-pointer overflow-hidden py-2.5 pl-14 pr-8 font-sh-adelle text-xs antialiased hover:bg-sh-highlight focus:bg-sh-highlight focus:outline-none"
-			tabIndex={idx}
+			tabIndex={tabindex}
 		>
 			<span className="before:absolute before:bottom-0 before:left-0 before:top-0 before:hidden before:w-[3px] before:bg-sh-highlightbar group-hover:before:block group-focus:before:block" />
 

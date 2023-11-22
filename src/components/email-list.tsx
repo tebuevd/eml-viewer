@@ -28,9 +28,9 @@ export function EmailList() {
 						<EmailItemRow
 							date={email.date}
 							from={email.from_name ?? email.from_address}
-							idx={ix}
 							key={email.id}
 							subject={email.subject ?? "(no subject)"}
+							tabindex={ix + 1}
 						/>
 					))}
 				</ul>
