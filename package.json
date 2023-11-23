@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@sqlite.org/sqlite-wasm": "^3.44.0-build1",
+    "@tanstack/react-router": "beta",
     "clsx": "^2.0.0",
     "comlink": "^4.4.1",
     "date-fns": "^2.30.0",
