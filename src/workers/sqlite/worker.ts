@@ -103,3 +103,14 @@ export function getAllEmails() {
 
 	return emails.map((email) => EmailRow.parse(email));
 }
+
+export function getEmailById(emailId: string) {
+	const rows = db.exec({
+		bind: [emailId],
+		returnValue: "resultRows",
+		rowMode: "object",
+		sql: "select * from emails where id = ?",
+	});
+
+	return rows.map((row) => EmailRow.parse(row));
+}
