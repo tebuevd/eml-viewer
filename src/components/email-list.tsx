@@ -26,7 +26,7 @@ export function EmailList() {
 	return (
 		<article className="flex h-full flex-col">
 			<section className="h-20 flex-none"></section>
-			<section className="no-scrollbar flex-1 overflow-scroll">
+			<section className="flex-1 overflow-scroll scrollbar-hide">
 				<ul>
 					{emails.map((email, ix) => (
 						<EmailItemRow
