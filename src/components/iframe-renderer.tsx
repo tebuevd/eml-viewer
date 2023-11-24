@@ -1,19 +1,15 @@
-import React from "react";
-
 type IframeRendererProps = {
 	srcDoc: string;
 };
 
-const IframeRenderer: React.FC<IframeRendererProps> = ({ srcDoc }) => {
+function IframeRenderer({ srcDoc }: IframeRendererProps) {
 	const srcDocWithStyles = `
   <style>
-    body {
-      overflow: auto;
-    }
     ::-webkit-scrollbar {
-      display: none;
+      display: none; /* Chrome, Safari, Opera */
     }
-    body {
+    html, body {
+      "-ms-overflow-style": none, /* IE and Edge */
       scrollbar-width: none; /* Firefox */
       scrollbar-color: transparent; /* Firefox */
     }
@@ -22,6 +18,6 @@ const IframeRenderer: React.FC<IframeRendererProps> = ({ srcDoc }) => {
 `;
 
 	return <iframe className="h-full w-full" srcDoc={srcDocWithStyles} />;
-};
+}
 
 export default IframeRenderer;
