@@ -105,6 +105,7 @@ export function getAllEmails() {
 }
 
 export function getEmailById(emailId: string) {
+	console.log("fetching email with id ", emailId);
 	const rows = db.exec({
 		bind: [emailId],
 		returnValue: "resultRows",

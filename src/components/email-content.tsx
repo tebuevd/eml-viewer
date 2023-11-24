@@ -1,15 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-import { EmailRow } from "../types/email";
-import { instance as sqliteWorker } from "../workers/sqlite";
 import IframeRenderer from "./iframe-renderer";
 
 type EmailContentProps = {
+	emailHtml: string;
 	emailId: string;
 };
 
-export function EmailContent({ emailId }: EmailContentProps) {
+export function EmailContent({ emailHtml, emailId }: EmailContentProps) {
 	const link = useRef<HTMLAnchorElement>(null);
 
 	useEffect(() => {
@@ -26,20 +25,6 @@ export function EmailContent({ emailId }: EmailContentProps) {
 			document.removeEventListener("keydown", EmailContentKeyDown);
 		};
 	}, []);
-
-	const [email, setEmail] = useState<EmailRow | null>(null);
-
-	useEffect(() => {
-		sqliteWorker
-			.getEmailById(emailId)
-			.then(([email]) => {
-				setEmail(email);
-			})
-			.catch((e) => {
-				console.error("Error getting email by id:", e);
-			});
-	}, [emailId]);
-	console.log(email);
 
 	return (
 		<div
@@ -67,7 +52,7 @@ export function EmailContent({ emailId }: EmailContentProps) {
 					}}
 				>
 					<div className="absolute bottom-0 left-0 top-0 z-10 w-[3px] bg-sh-highlightbar" />
-					<IframeRenderer key={email?.id} srcDoc={email?.html ?? ""} />
+					<IframeRenderer key={emailId} srcDoc={emailHtml} />
 				</article>
 			</div>
 		</div>

@@ -14,7 +14,8 @@
 	},
 	"dependencies": {
 		"@sqlite.org/sqlite-wasm": "^3.44.0-build1",
-		"@tanstack/react-router": "beta",
+		"@tanstack/react-query": "^5.8.4",
+		"@tanstack/react-router": "0.0.1-beta.214",
 		"clsx": "^2.0.0",
 		"comlink": "^4.4.1",
 		"date-fns": "^2.30.0",
@@ -25,10 +26,10 @@
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
-		"@types/react": "^18.2.15",
-		"@types/react-dom": "^18.2.7",
-		"@typescript-eslint/eslint-plugin": "^6.11.0",
-		"@typescript-eslint/parser": "^6.11.0",
+		"@types/react": "^18.2.38",
+		"@types/react-dom": "^18.2.17",
+		"@typescript-eslint/eslint-plugin": "^6.12.0",
+		"@typescript-eslint/parser": "^6.12.0",
 		"@vitejs/plugin-react-swc": "^3.3.2",
 		"autoprefixer": "^10.4.16",
 		"eslint": "^8.54.0",
@@ -40,7 +41,7 @@
 		"prettier": "^3.1.0",
 		"prettier-plugin-tailwindcss": "^0.5.7",
 		"tailwindcss": "^3.3.5",
-		"typescript": "^5.2.2",
+		"typescript": "^5.3.2",
 		"vite": "^5.0.0",
 		"vite-plugin-comlink": "^3.0.5",
 		"vite-plugin-wasm": "^3.2.2",
