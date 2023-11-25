@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	Outlet,
 	Route,
@@ -20,7 +21,20 @@ export const rootRoute = rootRouteWithContext<RouterContext>()({
 		return (
 			<>
 				<Outlet />
-				<TanStackRouterDevtools position="top-right" />
+				<div className="fixed right-0 top-0" id="devtools-menu">
+					<TanStackRouterDevtools
+						position="top-right"
+						toggleButtonProps={{
+							style: {
+								translate: "-60px 10px",
+							},
+						}}
+					/>
+					<ReactQueryDevtools
+						buttonPosition="top-right"
+						initialIsOpen={false}
+					/>
+				</div>
 				<ScrollRestoration />
 			</>
 		);
