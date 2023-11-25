@@ -96,12 +96,17 @@ export async function initDb() {
 }
 
 export function getAllEmails() {
-	const emails = db.exec("select * from emails order by date desc", {
-		returnValue: "resultRows",
-		rowMode: "object",
-	});
+	return new Promise((resolve) => {
+		const emails = db.exec("select * from emails order by date desc", {
+			returnValue: "resultRows",
+			rowMode: "object",
+		});
 
-	return emails.map((email) => EmailRow.parse(email));
+		// add some delay because it's just too fast ;)
+		setTimeout(() => {
+			resolve(emails.map((email) => EmailRow.parse(email)));
+		}, 300);
+	});
 }
 
 export function getEmailById(emailId: string) {

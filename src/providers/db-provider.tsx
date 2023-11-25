@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { LoadingScreen } from "../components/LoadingScreen";
 import { instance as dbWorker } from "../workers/sqlite";
 
 export function DbProvider({ children }: { children: React.ReactNode }) {
@@ -19,7 +20,7 @@ export function DbProvider({ children }: { children: React.ReactNode }) {
 	}, []);
 
 	if (loading) {
-		return <p className="grid h-full place-content-center">Loading...</p>;
+		return <LoadingScreen />;
 	}
 
 	return <>{children}</>;
