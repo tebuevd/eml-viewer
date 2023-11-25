@@ -1,27 +1,59 @@
 import { QueryClient } from "@tanstack/react-query";
-import { Route, rootRouteWithContext } from "@tanstack/react-router";
-import React from "react";
+import {
+	Outlet,
+	Route,
+	ScrollRestoration,
+	rootRouteWithContext,
+	useNavigate,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import App from "../App";
-import { LoadingScreen } from "../components/LoadingScreen";
-import { EmailList } from "../components/email-list";
+import { DbProvider } from "../providers/db-provider";
 
 type RouterContext = {
 	queryClient: QueryClient;
 };
 
 export const rootRoute = rootRouteWithContext<RouterContext>()({
-	component: App,
+	component: function RootRoute() {
+		return (
+			<>
+				<Outlet />
+				<TanStackRouterDevtools position="top-right" />
+				<ScrollRestoration />
+			</>
+		);
+	},
 });
 
-export const indexRoute = new Route({
-	component: () => {
+export const providersRoute = new Route({
+	component: function ProvidersRoute() {
 		return (
-			<React.Suspense fallback={<LoadingScreen />}>
-				<EmailList />
-			</React.Suspense>
+			<DbProvider>
+				<Outlet />
+			</DbProvider>
 		);
 	},
 	getParentRoute: () => rootRoute,
+	id: "providers",
+});
+
+export const layoutRoute = new Route({
+	component: function LayoutRoute() {
+		return <App />;
+	},
+	getParentRoute: () => providersRoute,
+	id: "layout",
+});
+
+export const indexRoute = new Route({
+	component: function IndexRoute() {
+		const navigate = useNavigate();
+		navigate({ to: "/emails/" }).catch(console.error);
+
+		return null;
+	},
+	getParentRoute: () => layoutRoute,
 	path: "/",
 });

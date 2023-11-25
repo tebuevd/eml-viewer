@@ -28,7 +28,7 @@ export function EmailContent({ emailHtml, emailId }: EmailContentProps) {
 
 	return (
 		<div className="isolate flex h-full">
-			<Link className="hidden" id="back" ref={link} to="/" />
+			<Link className="hidden" id="back" ref={link} to="/emails/" />
 			<aside className="w-40 bg-gradient-to-l from-sh-sidebar-start from-0% to-sh-sidebar-end to-40%" />
 
 			<div className="z-0 flex flex-1 justify-center pb-4 shadow-2xl shadow-black/10">

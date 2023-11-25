@@ -5,13 +5,23 @@ import ReactDOM from "react-dom/client";
 
 import "./index.css";
 import { emailRoute } from "./routes/emails/email.tsx";
-import { emailsRoute } from "./routes/emails/index.tsx";
-import { indexRoute, rootRoute } from "./routes/index.tsx";
+import { emailsIndexRoute, emailsRoute } from "./routes/emails/index.tsx";
+import {
+	indexRoute,
+	layoutRoute,
+	providersRoute,
+	rootRoute,
+} from "./routes/index.tsx";
 
 const queryClient = new QueryClient();
 
 const routeTree = rootRoute.addChildren([
-	indexRoute.addChildren([emailsRoute.addChildren([emailRoute])]),
+	providersRoute.addChildren([
+		layoutRoute.addChildren([
+			indexRoute,
+			emailsRoute.addChildren([emailsIndexRoute, emailRoute]),
+		]),
+	]),
 ]);
 const router = new Router({ context: { queryClient }, routeTree });
 

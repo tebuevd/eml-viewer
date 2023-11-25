@@ -9,7 +9,7 @@ export const emailRoute = new Route({
 	beforeLoad(opts) {
 		const { emailId } = opts.params;
 		const queryOptions = {
-			enabled: emailId,
+			enabled: !!emailId,
 			queryFn: () =>
 				sqliteWorker.getEmailById(emailId).then(([email]) => email),
 			queryKey: ["emails", emailId],
