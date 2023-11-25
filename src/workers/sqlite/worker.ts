@@ -95,7 +95,7 @@ export async function initDb() {
 	return typeof db !== "undefined";
 }
 
-export function getAllEmails() {
+export function getAllEmails(): Promise<EmailRow[]> {
 	return new Promise((resolve) => {
 		const emails = db.exec("select * from emails order by date desc", {
 			returnValue: "resultRows",
