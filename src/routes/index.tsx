@@ -21,20 +21,19 @@ export const rootRoute = rootRouteWithContext<RouterContext>()({
 		return (
 			<>
 				<Outlet />
-				<div className="fixed right-0 top-0" id="devtools-menu">
-					<TanStackRouterDevtools
-						position="top-right"
-						toggleButtonProps={{
-							style: {
-								translate: "-60px 10px",
-							},
-						}}
-					/>
-					<ReactQueryDevtools
-						buttonPosition="top-right"
-						initialIsOpen={false}
-					/>
-				</div>
+				<TanStackRouterDevtools
+					position="top-right"
+					toggleButtonProps={{
+						style: {
+							translate: "-60px 10px",
+						},
+					}}
+				/>
+				<ReactQueryDevtools
+					buttonPosition="top-right"
+					initialIsOpen={false}
+					position="right"
+				/>
 				<ScrollRestoration />
 			</>
 		);

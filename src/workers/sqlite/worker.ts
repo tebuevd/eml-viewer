@@ -3,7 +3,7 @@
 import sqlite3InitModule, { Database } from "@sqlite.org/sqlite-wasm";
 import { ulid } from "ulidx";
 
-import { EmailRow } from "../../types/email";
+import { EmailMetadata, EmailRow } from "../../types/email";
 import { instance as opfs } from "../opfs";
 import { parseEmlFile } from "../opfs/worker";
 
@@ -95,16 +95,19 @@ export async function initDb() {
 	return typeof db !== "undefined";
 }
 
-export function getAllEmails(): Promise<EmailRow[]> {
+export function getAllEmails(): Promise<EmailMetadata[]> {
 	return new Promise((resolve) => {
-		const emails = db.exec("select * from emails order by date desc", {
-			returnValue: "resultRows",
-			rowMode: "object",
-		});
+		const emails = db.exec(
+			"select id, from_name, from_address, subject, date from emails order by date desc",
+			{
+				returnValue: "resultRows",
+				rowMode: "object",
+			},
+		);
 
 		// add some delay because it's just too fast ;)
 		setTimeout(() => {
-			resolve(emails.map((email) => EmailRow.parse(email)));
+			resolve(emails.map((email) => EmailMetadata.parse(email)));
 		}, 300);
 	});
 }

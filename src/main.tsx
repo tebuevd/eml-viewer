@@ -1,9 +1,10 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Router, RouterProvider } from "@tanstack/react-router";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
 import "./index.css";
+import { queryClient } from "./queryclient.ts";
 import { emailRoute } from "./routes/emails/email.tsx";
 import { emailsIndexRoute, emailsRoute } from "./routes/emails/index.tsx";
 import {
@@ -12,8 +13,6 @@ import {
 	providersRoute,
 	rootRoute,
 } from "./routes/index.tsx";
-
-const queryClient = new QueryClient();
 
 const routeTree = rootRoute.addChildren([
 	providersRoute.addChildren([

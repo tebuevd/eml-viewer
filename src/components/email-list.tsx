@@ -10,6 +10,7 @@ export function EmailList() {
 	const { data } = useSuspenseQuery({
 		queryFn: () => sqlite.getAllEmails(),
 		queryKey: ["emails"],
+		staleTime: Infinity,
 	});
 
 	return (

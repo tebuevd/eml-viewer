@@ -28,7 +28,7 @@ export function EmailContent({ emailHtml, emailId }: EmailContentProps) {
 
 	return (
 		<div className="isolate flex h-full">
-			<Link className="hidden" id="back" ref={link} to="/emails/" />
+			<Link className="sr-only" id="back" ref={link} to="/emails/" />
 			<aside className="w-40 bg-gradient-to-l from-sh-sidebar-start from-0% to-sh-sidebar-end to-40%" />
 
 			<div
@@ -37,9 +37,18 @@ export function EmailContent({ emailHtml, emailId }: EmailContentProps) {
 					boxShadow: "0 0 30px 0 rgba(0,0,0,.1), 0 0 0.5px 0 rgba(0,0,0,.05)",
 				}}
 			>
-				<article className="shadow-highlight relative mx-4 mt-20 min-w-[460px] max-w-3xl flex-1 overflow-hidden rounded">
+				<article className="shadow-highlight relative mx-4 mt-20 flex min-w-[460px] max-w-[708px] flex-1 flex-col overflow-hidden rounded px-8 pb-1 pt-3">
 					<div className="absolute bottom-0 left-0 top-0 z-10 w-[3px] bg-sh-highlightbar" />
-					<IframeRenderer key={emailId} srcDoc={emailHtml} />
+					<section className="flex items-baseline font-sh-adelle text-sm font-bold">
+						<div>Dinislam</div>
+						<div className="ml-auto text-xs font-normal text-black/50">
+							NOV 22
+						</div>
+					</section>
+
+					<section className="flex-1">
+						<IframeRenderer key={emailId} srcDoc={emailHtml} />
+					</section>
 				</article>
 			</div>
 		</div>

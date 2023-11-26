@@ -1,6 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { useRef } from "react";
+
+import { sqliteWorker } from "../workers/sqlite";
 
 type EmailItemRowProps = {
 	date: null | string;
@@ -17,12 +20,24 @@ export function EmailItemRow({
 	subject,
 	tabindex,
 }: EmailItemRowProps) {
+	const queryClient = useQueryClient();
 	const link = useRef<HTMLAnchorElement>(null);
 
 	const dateString = date ? format(new Date(date), "MMM dd").toUpperCase() : "";
 	return (
 		<li
 			className="group relative h-9 cursor-pointer overflow-hidden font-sh-adelle text-xs antialiased hover:bg-sh-highlight focus:bg-sh-highlight focus:outline-none"
+			onFocus={function EmailItemRowOnFocus() {
+				queryClient
+					.ensureQueryData({
+						queryFn: () => sqliteWorker.getEmailById(emailId),
+						queryKey: ["email", emailId],
+						staleTime: Infinity,
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+			}}
 			onKeyDown={function EmailItemRowOnKeyDown(e) {
 				if (e.key === "Enter") {
 					e.preventDefault();
@@ -39,6 +54,8 @@ export function EmailItemRow({
 				params={{
 					emailId,
 				}}
+				preload="intent"
+				preloadDelay={100}
 				ref={link}
 				to="/emails/$emailId"
 			>
