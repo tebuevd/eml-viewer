@@ -1,14 +1,14 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useKeys } from "../hooks/useKeys";
-import { instance as sqlite } from "../workers/sqlite";
+import { sqliteWorker } from "../workers/sqlite";
 import { EmailItemRow } from "./email-item-row";
 
 export function EmailList() {
 	useKeys();
 
 	const { data } = useSuspenseQuery({
-		queryFn: () => sqlite.getAllEmails(),
+		queryFn: () => sqliteWorker.getAllEmails(),
 		queryKey: ["emails"],
 		staleTime: Infinity,
 	});

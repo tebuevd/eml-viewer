@@ -1,21 +1,25 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 
 import { cn } from "../utils/styles";
+import { sqliteWorker } from "../workers/sqlite";
 
-export function Dropzone({
-	className,
-	processFile,
-}: {
-	className?: string;
-	processFile: (file: File) => unknown;
-}) {
+export function Dropzone({ className }: { className?: string }) {
+	const queryClient = useQueryClient();
 	const [highlight, setHighlight] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	async function writeFilesToOPFS(files: FileList) {
+	async function processFiles(files: FileList) {
 		for (const file of files) {
-			await processFile(file);
+			if (file.name.endsWith(".eml")) {
+				await sqliteWorker.processEmlFile(file);
+			} else if (file.name.endsWith(".mbox")) {
+				await sqliteWorker.processMbox(file);
+			}
 		}
+		await queryClient.refetchQueries({
+			queryKey: ["emails"],
+		});
 	}
 
 	return (
@@ -41,7 +45,7 @@ export function Dropzone({
 			}}
 			onDrop={(e) => {
 				e.preventDefault();
-				writeFilesToOPFS(e.dataTransfer.files)
+				processFiles(e.dataTransfer.files)
 					.then(() => {
 						setHighlight(false);
 					})
@@ -51,7 +55,7 @@ export function Dropzone({
 			}}
 		>
 			<input
-				accept=".eml"
+				accept=".eml,.mbox"
 				className="hidden"
 				id="file-input"
 				multiple
@@ -62,7 +66,7 @@ export function Dropzone({
 						return;
 					}
 
-					writeFilesToOPFS(e.target.files)
+					processFiles(e.target.files)
 						.then(() => {
 							setHighlight(false);
 						})

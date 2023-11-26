@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
 import { LoadingScreen } from "../components/LoadingScreen";
-import { instance as dbWorker } from "../workers/sqlite";
+import { sqliteWorker } from "../workers/sqlite";
 
 export function DbProvider({ children }: { children: React.ReactNode }) {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		console.log("attempting to load db");
-		dbWorker
+		sqliteWorker
 			.initDb()
 			.then((result) => {
 				console.log("db loaded:", result);
