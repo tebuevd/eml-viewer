@@ -13,7 +13,12 @@ export function EmailList() {
 	});
 
 	return (
-		<article className="flex h-full flex-col">
+		<article
+			className="flex h-full flex-col"
+			style={{
+				boxShadow: "0 0 30px 0 rgba(0,0,0,.1), 0 0 0.5px 0 rgba(0,0,0,.05)",
+			}}
+		>
 			<section className="h-20 flex-none"></section>
 			<section className="flex-1 overflow-scroll scrollbar-hide">
 				<ul>

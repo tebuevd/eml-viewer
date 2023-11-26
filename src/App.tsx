@@ -8,7 +8,7 @@ function App() {
 
 	return (
 		<div className="grid max-h-full min-h-full grid-cols-[minmax(520px,1fr),minmax(200px,15%)] grid-rows-1">
-			<main className="row-span-full shadow-[0_0_30px_0] shadow-black/10">
+			<main className="z-10 row-span-full">
 				<Outlet />
 			</main>
 

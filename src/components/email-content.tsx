@@ -31,8 +31,13 @@ export function EmailContent({ emailHtml, emailId }: EmailContentProps) {
 			<Link className="hidden" id="back" ref={link} to="/emails/" />
 			<aside className="w-40 bg-gradient-to-l from-sh-sidebar-start from-0% to-sh-sidebar-end to-40%" />
 
-			<div className="z-0 flex flex-1 justify-center pb-4 shadow-2xl shadow-black/10">
-				<article className="relative mx-4 mt-20 min-w-[460px] max-w-3xl flex-1 overflow-hidden rounded shadow-2xl shadow-black/50">
+			<div
+				className="z-0 flex flex-1 justify-center pb-4"
+				style={{
+					boxShadow: "0 0 30px 0 rgba(0,0,0,.1), 0 0 0.5px 0 rgba(0,0,0,.05)",
+				}}
+			>
+				<article className="shadow-highlight relative mx-4 mt-20 min-w-[460px] max-w-3xl flex-1 overflow-hidden rounded">
 					<div className="absolute bottom-0 left-0 top-0 z-10 w-[3px] bg-sh-highlightbar" />
 					<IframeRenderer key={emailId} srcDoc={emailHtml} />
 				</article>
