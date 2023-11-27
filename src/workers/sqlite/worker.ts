@@ -146,6 +146,74 @@ export function getEmailById(emailId: string) {
 	return rows.map((row) => EmailRow.parse(row));
 }
 
+export async function processMboxWorkerPoolSharedArrayBuffer(file: File) {
+	const buffer = new SharedArrayBuffer(file.size);
+	const bytesView = new Uint8Array(buffer);
+	const reader = file.stream().getReader();
+	let pos = 0;
+
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
+	while (true) {
+		const { done, value } = await reader.read();
+
+		if (value) {
+			bytesView.set(value, pos);
+			pos += value.length;
+		}
+
+		if (done) {
+			break;
+		}
+	}
+
+	const numWorkers = navigator.hardwareConcurrency;
+	console.log(`using ${numWorkers} workers`);
+	const chunkSize = Math.ceil(file.size / numWorkers);
+	const workerPool: Worker[] = [];
+
+	for (let i = 0; i < numWorkers; i++) {
+		const worker = new Worker(new URL("../emailParser", import.meta.url), {
+			name: "emailParser",
+			type: "module",
+		});
+		workerPool.push(worker);
+
+		worker.postMessage({ buffer, chunkSize, id: i, start: i * chunkSize });
+
+		worker.onmessage = () => {
+			console.log(`worker ${i} finished`);
+			worker.terminate();
+		};
+	}
+}
+
+export async function processMboxWorkerPool(file: File) {
+	const numWorkers = Math.ceil(navigator.hardwareConcurrency / 2);
+	const chunkSize = Math.ceil(file.size / numWorkers);
+	const workerPool: Worker[] = [];
+	const buffer = await file.arrayBuffer();
+
+	for (let i = 0; i < numWorkers; i++) {
+		const worker = new Worker(new URL("../emailParser", import.meta.url), {
+			name: "emailParser",
+			type: "module",
+		});
+		workerPool.push(worker);
+		const slice = new Uint8Array(
+			buffer,
+			i * chunkSize,
+			i < numWorkers - 1 ? chunkSize : undefined,
+		);
+
+		worker.postMessage({ buffer: slice, id: i }, [slice.buffer]);
+
+		worker.onmessage = () => {
+			console.log(`worker ${i} finished`);
+			worker.terminate();
+		};
+	}
+}
+
 export async function processMbox(file: File) {
 	const start = performance.now();
 	const stream = file.stream();
