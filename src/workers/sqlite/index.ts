@@ -1,6 +1,4 @@
-export const instance = new ComlinkWorker<typeof import("./worker")>(
+export const sqliteWorker = new ComlinkWorker<typeof import("./worker")>(
 	new URL("./worker", import.meta.url),
-	{ type: "module" },
+	{ name: "SQLite Beast", type: "module" },
 );
-
-export const sqliteWorker = instance;

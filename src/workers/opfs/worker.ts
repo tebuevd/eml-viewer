@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
+import load, { eml_to_json } from "../../../crate/pkg/eml_viewer";
 import { EmailJson } from "../../types/email";
-import { parseEml } from "../../utils/eml";
 
 async function getRoot() {
 	return await navigator.storage.getDirectory();
@@ -36,11 +36,24 @@ export async function getFile(filename: string) {
 	return file;
 }
 
+async function emlFileToJsonString(file: File): Promise<string> {
+	await load();
+	const buffer = await file.arrayBuffer();
+	const bytes = new Uint8Array(buffer);
+	const jsonString = eml_to_json(bytes);
+	return jsonString;
+}
+
+export async function emlToJsonString(buf: Uint8Array): Promise<string> {
+	await load();
+	return eml_to_json(buf);
+}
+
 export async function parseEmlFile(filename: string) {
 	const root = await getRoot();
 	const fileHandle = await root.getFileHandle(filename);
 	const file = await fileHandle.getFile();
-	const json = await parseEml(file);
+	const jsonString = await emlFileToJsonString(file);
 
-	return EmailJson.parse(JSON.parse(json));
+	return EmailJson.parse(JSON.parse(jsonString));
 }

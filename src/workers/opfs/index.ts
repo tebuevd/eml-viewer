@@ -1,4 +1,4 @@
-export const instance = new ComlinkWorker<typeof import("./worker")>(
+export const opfsWorker = new ComlinkWorker<typeof import("./worker")>(
 	new URL("./worker", import.meta.url),
-	{ type: "module" },
+	{ name: "OPFS Chad", type: "module" },
 );

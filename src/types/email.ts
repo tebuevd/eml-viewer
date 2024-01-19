@@ -13,6 +13,7 @@ export const EmailJson = z.object({
 	subject: z.string().nullable(),
 	to: z.array(AddressBlob),
 });
+export type EmailJson = z.infer<typeof EmailJson>;
 
 export const EmailMetadata = z.object({
 	date: z.string().nullable(),
