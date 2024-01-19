@@ -1,58 +1,58 @@
 {
-	"name": "eml-viewer",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
-	"scripts": {
-		"build-wasm": "wasm-pack build ./crate --target web",
-		"check": "bun run typecheck && bun run lint ",
-		"dev": "vite",
-		"build": "tsc && vite build",
-		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-		"typecheck": "tsc --noEmit",
-		"preview": "vite preview"
-	},
-	"dependencies": {
-		"@sqlite.org/sqlite-wasm": "^3.44.0-build1",
-		"@tanstack/react-query": "^5.8.4",
-		"@tanstack/react-query-devtools": "^5.8.7",
-		"@tanstack/react-router": "^1",
-		"@tanstack/router-devtools": "latest",
-		"clsx": "^2.0.0",
-		"comlink": "^4.4.1",
-		"date-fns": "^2.30.0",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"tailwind-merge": "^1.14.0",
-		"ulidx": "^2.2.1",
-		"zod": "^3.22.4"
-	},
-	"devDependencies": {
-		"@types/react": "^18.2.38",
-		"@types/react-dom": "^18.2.17",
-		"@typescript-eslint/eslint-plugin": "^6.12.0",
-		"@typescript-eslint/parser": "^6.12.0",
-		"@vitejs/plugin-react-swc": "^3.3.2",
-		"autoprefixer": "^10.4.16",
-		"eslint": "^8.54.0",
-		"eslint-config-prettier": "^9.0.0",
-		"eslint-plugin-perfectionist": "^2.4.0",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"eslint-plugin-react-refresh": "^0.4.4",
-		"postcss": "^8.4.31",
-		"prettier": "^3.1.0",
-		"prettier-plugin-tailwindcss": "^0.5.7",
-		"tailwindcss": "^3.4.1",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.0",
-		"vite-plugin-comlink": "^4.0.2",
-		"vite-plugin-wasm": "^3.2.2",
-		"wasm-pack": "^0.12.1"
-	},
-	"prettier": {
-		"useTabs": true,
-		"plugins": [
-			"prettier-plugin-tailwindcss"
-		]
-	}
+  "name": "eml-viewer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build-wasm": "wasm-pack build ./crate --target web",
+    "check": "bun run typecheck && bun run lint ",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@sqlite.org/sqlite-wasm": "^3.44.2-build3",
+    "@tanstack/react-query": "^5.17.15",
+    "@tanstack/react-query-devtools": "^5.17.18",
+    "@tanstack/react-router": "^1.7.1",
+    "@tanstack/router-devtools": "^1.7.1",
+    "clsx": "^2.1.0",
+    "comlink": "^4.4.1",
+    "date-fns": "^3.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.0",
+    "ulidx": "^2.2.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-perfectionist": "^2.5.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.31",
+    "prettier": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.0",
+    "vite-plugin-comlink": "^4.0.2",
+    "vite-plugin-wasm": "^3.2.2",
+    "wasm-pack": "^0.12.1"
+  },
+  "prettier": {
+    "useTabs": true,
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  }
 }
