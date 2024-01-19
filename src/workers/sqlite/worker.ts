@@ -83,13 +83,13 @@ export async function initDb() {
 		printErr: console.error,
 	});
 
-	db = new sqlite3.oo1.DB("db.sqlite3", "c");
+	db = new sqlite3.oo1.OpfsDb("./db.sqlite3", "c");
 
 	db.exec(
-		'create virtual table emails_fts using fts5(from, to, title, body, tokenize="trigram");',
+		'create virtual table if not exists emails_fts using fts5(from, to, title, body, tokenize="trigram");',
 	);
 	db.exec(
-		`create table emails (
+		`create table if not exists emails (
 			id text primary key,
 			from_name text,
 			from_address text,
@@ -127,10 +127,7 @@ export function getAllEmailsSlow(): Promise<EmailMetadata[]> {
 			},
 		);
 
-		// add some delay because it's just too fast ;)
-		setTimeout(() => {
-			resolve(emails.map((email) => EmailMetadata.parse(email)));
-		}, 300);
+		resolve(emails.map((email) => EmailMetadata.parse(email)));
 	});
 }
 
@@ -144,74 +141,6 @@ export function getEmailById(emailId: string) {
 	});
 
 	return rows.map((row) => EmailRow.parse(row));
-}
-
-export async function processMboxWorkerPoolSharedArrayBuffer(file: File) {
-	const buffer = new SharedArrayBuffer(file.size);
-	const bytesView = new Uint8Array(buffer);
-	const reader = file.stream().getReader();
-	let pos = 0;
-
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
-	while (true) {
-		const { done, value } = await reader.read();
-
-		if (value) {
-			bytesView.set(value, pos);
-			pos += value.length;
-		}
-
-		if (done) {
-			break;
-		}
-	}
-
-	const numWorkers = navigator.hardwareConcurrency;
-	console.log(`using ${numWorkers} workers`);
-	const chunkSize = Math.ceil(file.size / numWorkers);
-	const workerPool: Worker[] = [];
-
-	for (let i = 0; i < numWorkers; i++) {
-		const worker = new Worker(new URL("../emailParser", import.meta.url), {
-			name: "emailParser",
-			type: "module",
-		});
-		workerPool.push(worker);
-
-		worker.postMessage({ buffer, chunkSize, id: i, start: i * chunkSize });
-
-		worker.onmessage = () => {
-			console.log(`worker ${i} finished`);
-			worker.terminate();
-		};
-	}
-}
-
-export async function processMboxWorkerPool(file: File) {
-	const numWorkers = Math.ceil(navigator.hardwareConcurrency / 2);
-	const chunkSize = Math.ceil(file.size / numWorkers);
-	const workerPool: Worker[] = [];
-	const buffer = await file.arrayBuffer();
-
-	for (let i = 0; i < numWorkers; i++) {
-		const worker = new Worker(new URL("../emailParser", import.meta.url), {
-			name: "emailParser",
-			type: "module",
-		});
-		workerPool.push(worker);
-		const slice = new Uint8Array(
-			buffer,
-			i * chunkSize,
-			i < numWorkers - 1 ? chunkSize : undefined,
-		);
-
-		worker.postMessage({ buffer: slice, id: i }, [slice.buffer]);
-
-		worker.onmessage = () => {
-			console.log(`worker ${i} finished`);
-			worker.terminate();
-		};
-	}
 }
 
 export async function processMbox(file: File) {
@@ -251,3 +180,71 @@ export async function processMbox(file: File) {
 	const end = performance.now();
 	console.log(`Processing took ${end - start}ms`);
 }
+
+// export async function processMboxWorkerPoolSharedArrayBuffer(file: File) {
+// 	const buffer = new SharedArrayBuffer(file.size);
+// 	const bytesView = new Uint8Array(buffer);
+// 	const reader = file.stream().getReader();
+// 	let pos = 0;
+
+// 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-condition
+// 	while (true) {
+// 		const { done, value } = await reader.read();
+
+// 		if (value) {
+// 			bytesView.set(value, pos);
+// 			pos += value.length;
+// 		}
+
+// 		if (done) {
+// 			break;
+// 		}
+// 	}
+
+// 	const numWorkers = navigator.hardwareConcurrency;
+// 	console.log(`using ${numWorkers} workers`);
+// 	const chunkSize = Math.ceil(file.size / numWorkers);
+// 	const workerPool: Worker[] = [];
+
+// 	for (let i = 0; i < numWorkers; i++) {
+// 		const worker = new Worker(new URL("../emailParser", import.meta.url), {
+// 			name: "emailParser",
+// 			type: "module",
+// 		});
+// 		workerPool.push(worker);
+
+// 		worker.postMessage({ buffer, chunkSize, id: i, start: i * chunkSize });
+
+// 		worker.onmessage = () => {
+// 			console.log(`worker ${i} finished`);
+// 			worker.terminate();
+// 		};
+// 	}
+// }
+
+// export async function processMboxWorkerPool(file: File) {
+// 	const numWorkers = Math.ceil(navigator.hardwareConcurrency / 2);
+// 	const chunkSize = Math.ceil(file.size / numWorkers);
+// 	const workerPool: Worker[] = [];
+// 	const buffer = await file.arrayBuffer();
+
+// 	for (let i = 0; i < numWorkers; i++) {
+// 		const worker = new Worker(new URL("../emailParser", import.meta.url), {
+// 			name: "emailParser",
+// 			type: "module",
+// 		});
+// 		workerPool.push(worker);
+// 		const slice = new Uint8Array(
+// 			buffer,
+// 			i * chunkSize,
+// 			i < numWorkers - 1 ? chunkSize : undefined,
+// 		);
+
+// 		worker.postMessage({ buffer: slice, id: i }, [slice.buffer]);
+
+// 		worker.onmessage = () => {
+// 			console.log(`worker ${i} finished`);
+// 			worker.terminate();
+// 		};
+// 	}
+// }
