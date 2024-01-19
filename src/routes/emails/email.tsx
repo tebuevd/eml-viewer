@@ -1,34 +1,30 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Route } from "@tanstack/react-router";
 
 import { emailsRoute } from ".";
 import { EmailContent } from "../../components/email-content";
 import { sqliteWorker } from "../../workers/sqlite";
 
-export const emailRoute = new Route({
-	beforeLoad(opts) {
-		const { emailId } = opts.params;
-		const queryOptions = {
-			enabled: !!emailId,
-			queryFn: () =>
-				sqliteWorker.getEmailById(emailId).then(([email]) => email),
-			queryKey: ["emails", emailId],
-		};
+const emailQuery = (emailId: string) =>
+	queryOptions({
+		enabled: !!emailId,
+		queryFn: () => sqliteWorker.getEmailById(emailId).then(([email]) => email),
+		queryKey: ["emails", emailId],
+	});
 
-		return { queryOptions };
-	},
-	component: function EmailRoute({ useRouteContext }) {
-		const { queryOptions } = useRouteContext();
-		const emailQuery = useSuspenseQuery(queryOptions);
-		const emailData = emailQuery.data;
+export const emailRoute = new Route({
+	component: function EmailRoute() {
+		const { emailId } = emailRoute.useParams();
+		const queryResult = useSuspenseQuery(emailQuery(emailId));
+		const emailData = queryResult.data;
 
 		return (
 			<EmailContent emailHtml={emailData.html ?? ""} emailId={emailData.id} />
 		);
 	},
 	getParentRoute: () => emailsRoute,
-	async load(opts) {
-		await opts.context.queryClient.ensureQueryData(opts.context.queryOptions);
+	loader({ context: { queryClient }, params: { emailId } }) {
+		return queryClient.ensureQueryData(emailQuery(emailId));
 	},
 	path: "$emailId",
 });
