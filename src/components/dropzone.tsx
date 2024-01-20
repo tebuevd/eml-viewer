@@ -1,29 +1,50 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import {
+	Button,
+	DropZone,
+	FileDropItem,
+	FileTrigger,
+} from "react-aria-components";
 
 import { cn } from "../utils/styles";
 import { sqliteWorker } from "../workers/sqlite";
 
 export function Dropzone({ className }: { className?: string }) {
-	const queryClient = useQueryClient();
-	const [highlight, setHighlight] = useState(false);
-	const inputRef = useRef<HTMLInputElement>(null);
+	const [processing, setProcessing] = useState(false);
+	const highlight = false;
 
-	async function processFiles(files: FileList) {
+	const processEmlMboxFiles = useCallback(function processEmlMboxFiles(
+		files: File[] | FileList,
+	) {
+		setProcessing(true);
+		const promises = [];
 		for (const file of files) {
-			if (file.name.endsWith(".eml")) {
-				await sqliteWorker.processEmlFile(file);
-			} else if (file.name.endsWith(".mbox")) {
-				await sqliteWorker.processMbox(file);
+			switch (true) {
+				case file.name.endsWith(".eml"):
+					promises.push(sqliteWorker.processEmlFile(file));
+					break;
+				case file.name.endsWith(".mbox"):
+					promises.push(sqliteWorker.processMbox(file));
+					break;
+				default:
+					break;
 			}
 		}
-		await queryClient.refetchQueries({
-			queryKey: ["emails"],
-		});
-	}
+
+		Promise.allSettled(promises)
+			.then((results) => {
+				console.log(results);
+				setProcessing(false);
+			})
+			.catch((err) => {
+				console.error(err);
+				setProcessing(false);
+			});
+	}, []);
 
 	return (
-		<label
+		<DropZone
 			className={cn(
 				"grid place-content-center rounded border-2 border-solid",
 				"hover:border-none hover:outline hover:outline-2",
@@ -32,52 +53,32 @@ export function Dropzone({ className }: { className?: string }) {
 				},
 				className,
 			)}
-			onDragEnter={(e) => {
-				e.preventDefault();
-				setHighlight(true);
-			}}
-			onDragLeave={(e) => {
-				e.preventDefault();
-				setHighlight(false);
-			}}
-			onDragOver={(e) => {
-				e.preventDefault();
-			}}
-			onDrop={(e) => {
-				e.preventDefault();
-				processFiles(e.dataTransfer.files)
-					.then(() => {
-						setHighlight(false);
+			onDrop={function dropZoneOnDrop(e) {
+				Promise.all(
+					e.items
+						.filter((i): i is FileDropItem => i.kind === "file")
+						.map((i) => i.getFile()),
+				)
+					.then((files) => {
+						processEmlMboxFiles(files);
 					})
 					.catch((err) => {
-						console.error("Error in writeFilesToOPFS:", err);
+						console.error(err);
 					});
 			}}
 		>
-			<input
-				accept=".eml,.mbox"
-				className="hidden"
-				id="file-input"
-				multiple
-				onChange={(e) => {
-					e.preventDefault();
-
-					if (!e.target.files) {
-						return;
+			<FileTrigger
+				acceptedFileTypes={[".eml", ".mbox"]}
+				allowsMultiple
+				onSelect={function fileTriggerOnSelect(files) {
+					if (files) {
+						processEmlMboxFiles(files);
 					}
-
-					processFiles(e.target.files)
-						.then(() => {
-							setHighlight(false);
-						})
-						.catch((err) => {
-							console.error("Error in writeFilesToOPFS:", err);
-						});
 				}}
-				ref={inputRef}
-				type="file"
-			/>
-			Drag Files Here
-		</label>
+			>
+				{!processing && <Button>Drag Files Here</Button>}
+				{processing && "Processing..."}
+			</FileTrigger>
+		</DropZone>
 	);
 }
