@@ -26,7 +26,7 @@ export function EmailItemRow({
 	const dateString = date ? format(new Date(date), "MMM dd").toUpperCase() : "";
 	return (
 		<li
-			className="group relative h-9 cursor-pointer overflow-hidden font-sh-adelle text-xs antialiased hover:bg-sh-highlight focus:bg-sh-highlight focus:outline-none"
+			className="group relative h-9 cursor-pointer overflow-hidden text-xs antialiased hover:bg-sh-highlight focus:bg-sh-highlight focus:outline-none"
 			onFocus={function EmailItemRowOnFocus() {
 				queryClient
 					.ensureQueryData({
@@ -60,7 +60,7 @@ export function EmailItemRow({
 				to="/emails/$emailId"
 			>
 				<div className="flex h-4 gap-4 align-baseline">
-					<div className="max-w-[22.5%] flex-1 basis-[22.5%] overflow-hidden whitespace-nowrap text-xs font-bold text-black/80">
+					<div className="max-w-[22.5%] flex-1 basis-[22.5%] overflow-hidden whitespace-nowrap text-xs font-semibold text-black/80">
 						{from}
 					</div>
 					<div className="flex-1 overflow-hidden overflow-ellipsis whitespace-nowrap">

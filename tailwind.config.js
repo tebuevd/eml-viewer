@@ -6,9 +6,6 @@ export default {
 			boxShadow: {
 				sh: "0 2px 8px 0 rgba(0,0,0,.2), 0 0 0.5px 0 rgba(0,0,0,.1);",
 			},
-			fontFamily: {
-				"sh-adelle": ['"Superhuman Adelle"', "ui-sans-serif"],
-			},
 			colors: {
 				sh: {
 					highlight: "#F4F6FB",
