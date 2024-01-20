@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import {
 	Button,
 	DropZone,
@@ -11,10 +11,11 @@ import { cn } from "../utils/styles";
 import { sqliteWorker } from "../workers/sqlite";
 
 export function Dropzone({ className }: { className?: string }) {
+	const queryClient = useQueryClient();
 	const [processing, setProcessing] = useState(false);
 	const highlight = false;
 
-	const processEmlMboxFiles = useCallback(function processEmlMboxFiles(
+	const processEmlMboxFiles = useCallback(async function processEmlMboxFiles(
 		files: File[] | FileList,
 	) {
 		setProcessing(true);
@@ -32,7 +33,7 @@ export function Dropzone({ className }: { className?: string }) {
 			}
 		}
 
-		Promise.allSettled(promises)
+		await Promise.allSettled(promises)
 			.then((results) => {
 				console.log(results);
 				setProcessing(false);
@@ -60,7 +61,10 @@ export function Dropzone({ className }: { className?: string }) {
 						.map((i) => i.getFile()),
 				)
 					.then((files) => {
-						processEmlMboxFiles(files);
+						return processEmlMboxFiles(files);
+					})
+					.then(() => {
+						return queryClient.refetchQueries({ queryKey: ["emails"] });
 					})
 					.catch((err) => {
 						console.error(err);
@@ -72,7 +76,7 @@ export function Dropzone({ className }: { className?: string }) {
 				allowsMultiple
 				onSelect={function fileTriggerOnSelect(files) {
 					if (files) {
-						processEmlMboxFiles(files);
+						processEmlMboxFiles(files).catch(console.error);
 					}
 				}}
 			>
